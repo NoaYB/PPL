@@ -1,0 +1,50 @@
+#lang racket/base
+
+; Signature: append(l1 l2)
+; Type: [List(T) * List(T) -> List(T)]
+; Purpose: concatenate two list
+; Pre-conditions: true
+; Tests: (append (list 1 2) (list 3 4) => '(1 2 3 4))
+
+(define append
+  (lambda (l1 l2)
+    (if (null? l1)
+        l2
+        (cons (car l1) (append (cdr l1) l2)))))
+
+
+
+; Signature: reverse(l)
+; Type: [List(T) -> List(T)]
+; Purpose: reverse list items
+; Pre-conditions: true
+; Tests: (reverse (list 1 2 3) => '(3 2 1))
+
+(define reverse
+  (lambda (l)
+    (if (null? l)
+        '()
+        (append (reverse (cdr l)) (list (car l))))))
+
+
+
+; Signature: duplicate-items(lst dup-count)
+; Type: [List(T) * List(Number) -> List(T)]
+; Purpose: duplicate list items
+; Pre-conditions: true
+; Tests: (duplicate-items (list 1 2 3) (list 1 0)=> '(1 3))
+
+(define duplicate-items
+  (lambda (lst dup-count)
+    (define duplicate-item
+      (lambda (item times)
+        (if (<= times 0)
+            '()
+            (cons item (duplicate-item item (- times 1))))))
+    (define shift-left-cyclic
+      (lambda (lst)
+        (append (cdr lst) (list (car lst)))))
+    (if (null? lst)
+        '()
+        (append (duplicate-item (car lst) (car dup-count))
+                (duplicate-items (cdr lst) (shift-left-cyclic dup-count))))))
